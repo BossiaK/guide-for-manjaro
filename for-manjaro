@@ -1,0 +1,92 @@
+Install packages needed to build
+Note: Some of these may have changed some ,it has been a good 6 months since I have had to set up an environment. Feel free to post and changes or ask for help.
+$ yaourt -S git gnupg flex bison gperf sdl wxgtk squashfs-tools curl ncurses zlib schedtool perl-switch zip unzip libxslt python2-virtualenv bc
+$ yaourt -S gcc-multilib lib32-zlib ( For Arch Linux sudo mousepad /etc/pacman.conf and include multilib-testing & multilib. Then update packages sudo pacman -Syu) 
+$ yaourt libtinfo , then pick libtinfo-5 5-10 should be #5
+
+# To build Android 6.0 and above you also need rsync.
+$ yaourt -S rsync
+
+# To install ncurses5-compat-libs you need
+# to enter this key in your terminal first.
+$ gpg --keyserver pgp.mit.edu --recv-keys C52048C0C0748FEE227D47A2702353E0F7E48EDB
+$ yaourt -S ncurses5-compat-libs
+
+# Before installing lib32-ncurses5-compat-libs I had to
+# uninstall these packages due to conflicts and dependencies.
+# this might or might not be necessary for you. If you are unable to
+# install lib32-ncureses5-compat-libs because it conflicts with other
+# installed packages, this should fix the problem.
+$ sudo pacman -R lib32-ncurses lib32-libxml2 lib32-gconf lib32-libcroco lib32-libsoup lib32-llvm-libs lib32-readline lib32-js17 lib32-librsvg lib32-mesa lib32-rest lib32-cairo lib32-glew1.10 lib32-gtk3 lib32-polkit lib32-colord lib32-gtk2 lib32-pango lib32-libdbusmenu-gtk2 lib32-libindicator-gtk2 lib32-libappindicator-gtk2
+
+# Install more necessary packages.
+$ yaourt -S lib32-ncurses5-compat-libs
+$ yaourt -S lib32-readline
+$ yaourt -S make-3.81
+$ yaourt -S pngcrush
+$ yaourt -S pngquant
+
+# Install java 7 and set it as default
+$ yaourt -S jdk7-openjdk
+$ sudo archlinux-java set java-7-openjdk
+# Check java version.
+$ java -version
+# Output should look something like this.
+# java version "1.7.0_91"
+# OpenJDK Runtime Environment (IcedTea 2.6.3)
+# (Arch Linux build 7.u91_2.6.3-3-x86_64)
+# OpenJDK 64-Bit Server VM (build 24.91-b01, mixed mode)
+
+# Install java 8 and set it as default
+$ yaourt -S jdk8-openjdk
+$ sudo  archlinux-java set java-8-openjdk
+$ java -version
+# Output should look something like this.
+# openjdk version "1.8.0_112"
+# OpenJDK Runtime Environment (build 1.8.0_112-b15)
+# OpenJDK 64-Bit Server VM (build 25.112-b15, mixed mode)
+
+# Install repo and configure it to download the source
+$ mkdir ~/bin
+$ PATH=~/bin:$PATH
+$ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+$ chmod a+x ~/bin/repo
+
+# Symlink make-3.81 and python2 to ~/bin
+$ ln -s /usr/bin/make-3.81 ~/bin/make
+$ ln -s /usr/bin/make-3.81-config ~/bin/make-config
+$ ln -s /usr/bin/python2 ~/bin/python
+$ ln -s /usr/bin/python2-config ~/bin/python-config
+
+# Download the Android SDK from
+# [url]http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz[/url]
+# Then extract it to your home directory and rename to android-sdk
+
+# Open and edit .bashrc with mousepad text editor.
+$ mousepad ~/.bashrc
+
+# Add these lines to the end of .bashrc (make sure you dont copy the *).
+* export LANG=C
+* export PATH=~/bin:$PATH
+* export PATH=$PATH:~/android-sdk/tools/
+* export PATH=$PATH:~/android-sdk/platform-tools/
+* export USE_CCACHE=1
+* export CCACHE_DIR=~/.ccache
+* export JAVA_HOME=/usr/lib/jvm/java
+# Save changes and close mousepad.
+
+# Restart .bashrc.
+$ source ~/.bashrc
+
+# Run SDK Manager and install the platform-tools(adb, fastboot, etc...).
+$ android sdk (Select platform-tools and install)
+# Close SDK Manager
+
+# Check make version. (It should be 3.81)
+$ make --v
+
+# Check python version. (It should be 2.7)
+$ python --version
+
+For those getting clang errors add this commit 
+[url]https://review.cyanogenmod.org/#/c/120824/[/url]
